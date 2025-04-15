@@ -1,0 +1,40 @@
+name: models
+
+x-base-vllm: &base-vllm
+  image: vllm/vllm-openai:${VLLM_TAG:-v0.8.2}
+  ipc: host # TODO: replace it with shm-size
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - capabilities: [ gpu ]
+            driver: nvidia
+            count: all
+  environment:
+    HUGGING_FACE_HUB_TOKEN: ${HUGGING_FACE_HUB_TOKEN}
+    HF_HUB_ENABLE_HF_TRANSFER: 0
+  volumes:
+    - hf_cache:/root/.cache/huggingface
+
+services:
+  proxy:
+    image: nginx:${NGINX_TAG:-1.27-alpine}
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:8080
+
+  qwen2.5-0.5b:
+    <<: *base-vllm
+    command:
+      - --task=generate
+      - --model=Qwen/Qwen2.5-0.5B-Instruct-GPTQ-Int4
+
+  user-bge-m3:
+    <<: *base-vllm
+    command:
+      - --task=embed
+      - --model=deepvk/USER-bge-m3
+
+volumes:
+  hf_cache:
