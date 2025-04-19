@@ -17,7 +17,7 @@ docker compose up -d
 ## Check
 
 ```shell
-curl -X POST "http://localhost:8080/models/qwen2.5-0.5b/v1/chat/completions" \
+curl -X POST "http://localhost:8080/vllms/qwen2.5-0.5b/v1/chat/completions" \
 	-H "Content-Type: application/json" \
 	--data '{
 		"model": "Qwen/Qwen2.5-0.5B-Instruct-GPTQ-Int4",
