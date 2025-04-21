@@ -1,0 +1,28 @@
+name: vllms
+
+services:
+  grafana:
+    image: grafana/grafana:${GRAFANA_TAG:-11.6.0}
+    volumes:
+      - ./docker/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./docker/grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards
+    ports:
+      - "3000:3000"
+    networks:
+      - vllms_net
+    depends_on:
+      - prometheus
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_TAG:-v3.3.0}
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - vllms_net
+
+networks:
+  vllms_net:
+    external: true

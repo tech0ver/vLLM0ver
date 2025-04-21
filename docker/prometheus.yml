@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: vllm-job
+    static_configs:
+      - targets:
+          - qwen2.5-0.5b:8000
+          - user-bge-m3:8000
