@@ -5,5 +5,6 @@ scrape_configs:
   - job_name: vllm-job
     static_configs:
       - targets:
+          # TODO: Add your model below
           - qwen2.5-0.5b:8000
           - user-bge-m3:8000
