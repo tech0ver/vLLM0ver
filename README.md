@@ -100,7 +100,7 @@ services:
 ...
 ```
 
-### Update [nginx.conf](nginx.conf)
+### Update [nginx.conf](docker/nginx.conf)
 
 ```diff
 events {}
