@@ -17,9 +17,9 @@ services:
   proxy:
     image: nginx:${NGINX_TAG:-1.27-alpine}
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - 8080:8080
+      - "8080:8080"
 
   qwen2.5-0.5b:
     <<: *base-vllm
