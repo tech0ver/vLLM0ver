@@ -117,3 +117,15 @@ http {
         location ~ ^/vllms/(?<model>[^/]+?)/(?<path>.*)$ {
 ...
 ```
+
+## Observability
+
+### Run
+
+```shell
+docker compose -f docker-compose.obs.yml up -d
+```
+
+### Open
+
+Go to http://localhost:3000 as `admin`/`admin`.
