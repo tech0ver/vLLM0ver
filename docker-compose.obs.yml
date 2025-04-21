@@ -1,4 +1,4 @@
-name: vllms
+name: vllms-obs
 
 services:
   grafana:
