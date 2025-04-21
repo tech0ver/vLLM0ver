@@ -3,13 +3,7 @@ name: models
 x-base-vllm: &base-vllm
   image: vllm/vllm-openai:${VLLM_TAG:-v0.8.2}
   ipc: host # TODO: replace it with shm-size
-  deploy:
-    resources:
-      reservations:
-        devices:
-          - capabilities: [ gpu ]
-            driver: nvidia
-            count: all
+  gpus: all
   environment:
     HUGGING_FACE_HUB_TOKEN: ${HUGGING_FACE_HUB_TOKEN}
     HF_HUB_ENABLE_HF_TRANSFER: 1
