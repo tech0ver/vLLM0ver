@@ -1,4 +1,4 @@
-name: models
+name: vllms
 
 x-base-vllm: &base-vllm
   image: vllm/vllm-openai:${VLLM_TAG:-v0.8.2}
@@ -10,6 +10,8 @@ x-base-vllm: &base-vllm
     HF_HUB_DISABLE_TELEMETRY: 1
   volumes:
     - hf_cache:/root/.cache/huggingface
+  depends_on:
+    - proxy
 
 services:
   proxy:
