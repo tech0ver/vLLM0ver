@@ -1,4 +1,9 @@
-# [vLLM](https://docs.vllm.ai) in [Docker](https://www.docker.com)
+# vLLM in Docker
+
+Run [vLLM](https://docs.vllm.ai) with [Docker Compose](https://docs.docker.com/compose/).
+
+> [!NOTE]
+> Using Kubernetes? See the [vLLM production stack](https://github.com/vllm-project/production-stack).
 
 ## Using
 
