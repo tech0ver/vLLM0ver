@@ -3,9 +3,9 @@
 Run [vLLM](https://docs.vllm.ai) with [Docker Compose](https://docs.docker.com/compose/).
 
 > [!NOTE]
-> Using Kubernetes? See the [vLLM production stack](https://github.com/vllm-project/production-stack).
+> For Kubernetes, see the [vLLM production stack](https://github.com/vllm-project/production-stack).
 
-## Using
+## Usage
 
 ### Prepare
 
@@ -13,7 +13,7 @@ Run [vLLM](https://docs.vllm.ai) with [Docker Compose](https://docs.docker.com/c
 cp tmp.env .env
 ```
 
-Fill in the required fields like `HUGGING_FACE_HUB_TOKEN`.
+Set `HUGGING_FACE_HUB_TOKEN` and other required fields.
 
 ### Run
 
@@ -21,29 +21,28 @@ Fill in the required fields like `HUGGING_FACE_HUB_TOKEN`.
 docker compose up -d
 ```
 
-### Check
+### Test
 
 ```shell
 curl -X POST "http://localhost:8080/vllms/qwen2.5-0.5b/v1/chat/completions" \
-	-H "Content-Type: application/json" \
-	--data '{
-		"messages": [
-			{
-				"role": "user",
-				"content": "What is the capital of France?"
-			}
-		]
-	}'
+  -H "Content-Type: application/json" \
+  --data '{
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      }
+    ]
+  }'
 ```
 
-## Adding new model
+## Add Model
 
 > [!IMPORTANT]
-> See [supported models](https://docs.vllm.ai/en/latest/models/supported_models.html)
-> and [arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html)
-> by vLLM.
+> Refer to [supported models](https://docs.vllm.ai/en/latest/models/supported_models.html)
+> and [engine arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html).
 
-### Update [docker-compose.yml](docker-compose.yml)
+### Edit [docker-compose.yml](docker-compose.yml)
 
 ```diff
 ...
@@ -62,27 +61,41 @@ services:
 ...
 ```
 
-### Check new model
+### Test Model
 
 ```shell
 curl -X POST "http://localhost:8080/vllms/deepseek-r1/v1/chat/completions" \
-	-H "Content-Type: application/json" \
-	--data '{
-		"messages": [
-			{
-				"role": "user",
-				"content": "What is the capital of France?"
-			}
-		]
-	}'
+  -H "Content-Type: application/json" \
+  --data '{
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      }
+    ]
+  }'
+```
+
+### Update [prometheus.yml](docker/prometheus.yml)
+
+```diff
+...
+scrape_configs:
+  - job_name: vllm-job
+    static_configs:
+      - targets:
+          - qwen2.5-0.5b:8000
+          - user-bge-m3:8000
++         - deepseek-r1:8000
+...
 ```
 
 ## Basic Auth
 
-### Create `nginx.htpasswd`
+### Create Credentials
 
 ```shell
-htpasswd -cb nginx.htpasswd YOUR_USER YOUR_PASSWORD
+htpasswd -cb docker/nginx.htpasswd YOUR_USER YOUR_PASSWORD
 ```
 
 ### Update [docker-compose.yml](docker-compose.yml)
@@ -93,8 +106,8 @@ services:
   proxy:
     image: nginx:${NGINX_TAG:-1.27-alpine}
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-+     - ./nginx.htpasswd:/etc/nginx/.htpasswd:ro
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
++     - ./docker/nginx.htpasswd:/etc/nginx/.htpasswd:ro
     ports:
       - 8080:8080
 ...
@@ -137,12 +150,12 @@ services:
 
 ## Observability
 
-### Run
+### Launch
 
 ```shell
 docker compose -f docker-compose.obs.yml up -d
 ```
 
-### Open
+### Access
 
-Go to http://localhost:3000 as `admin`/`admin`.
+Go to [http://localhost:3000](http://localhost:3000) (login: `admin`/`admin`).
